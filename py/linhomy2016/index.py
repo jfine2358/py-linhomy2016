@@ -4,7 +4,7 @@
 
 from functools import lru_cache
 from .tools import compose_2
-from .tools import str_from_base36
+from .tools import str_from_bytes36
 
 
 @lru_cache(maxsize=None)
@@ -67,11 +67,11 @@ def _data_0(dim):
 def _data(rank, dim):
     '''Return data store for all indexes of given rank and dimension.
 
-    >>> str_from_base36(_data(0, 0))
+    >>> str_from_bytes36(_data(0, 0))
     '00'
-    >>> str_from_base36(_data(0, 1))
+    >>> str_from_bytes36(_data(0, 1))
     '01'
-    >>> str_from_base36(_data(0, 10))
+    >>> str_from_bytes36(_data(0, 10))
     '0a1826344250'
 
     '''

@@ -25,27 +25,27 @@ def compose_2(n):
 
 base36_digits = string.digits + string.ascii_lowercase
 
-def str_from_base36(b):
+def str_from_bytes36(b):
     '''Return string representation of base 36 bytes.
 
-    >>> str_from_base36(bytes(range(36)))
+    >>> str_from_bytes36(bytes(range(36)))
     '0123456789abcdefghijklmnopqrstuvwxyz'
 
-    >>> str_from_base36(bytes([36]))
+    >>> str_from_bytes36(bytes([36]))
     Traceback (most recent call last):
     IndexError: string index out of range
     '''
     return ''.join(base36_digits[i] for i in b)
 
 
-def base36_from_str(s):
+def bytes36_from_str(s):
     '''Return bytes, the characters of s as base 36 numbers.
 
     >>> base36_digits
     '0123456789abcdefghijklmnopqrstuvwxyz'
-    >>> list(base36_from_str(base36_digits)) == list(range(36))
+    >>> list(bytes36_from_str(base36_digits)) == list(range(36))
     True
-    >>> list(base36_from_str(base36_digits.upper())) == list(range(36))
+    >>> list(bytes36_from_str(base36_digits.upper())) == list(range(36))
     True
     '''
     return bytes(int(c, 36) for c in s)
