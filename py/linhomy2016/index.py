@@ -4,6 +4,7 @@
 
 from functools import lru_cache
 from .tools import compose_2
+from .tools import str_from_base36
 
 
 @lru_cache(maxsize=None)
@@ -41,3 +42,43 @@ def size(rank, dim):
             value += size(0, i) * size(rank - 1, j)
 
         return value
+
+
+def _data_0(dim):
+    '''
+    >>> list(_data_0(0))
+    [0, 0]
+    >>> list(_data_0(1))
+    [0, 1]
+    >>> list(_data_0(2))
+    [0, 2, 1, 0]
+    >>> list(_data_0(3))
+    [0, 3, 1, 1]
+    >>> list(_data_0(4))
+    [0, 4, 1, 2, 2, 0]
+    '''
+
+    for i in range(size(0, dim)):
+        yield i
+        yield dim - 2 * i
+
+
+@lru_cache(maxsize=None)
+def _data(rank, dim):
+    '''Return data store for all indexes of given rank and dimension.
+
+    >>> str_from_base36(_data(0, 0))
+    '00'
+    >>> str_from_base36(_data(0, 1))
+    '01'
+    >>> str_from_base36(_data(0, 10))
+    '0a1826344250'
+
+    '''
+    length = size(rank, dim)
+    value = bytearray(2 * rank * length)
+
+    if rank == 0:
+        return bytes(_data_0(dim))
+    else:
+        raise ValueError        # Not yet implemented.
