@@ -3,6 +3,26 @@
 
 import string
 
+def chunk(size, seq):
+    '''Iterate over sequence, broken into size chunks.
+
+    >>> list(chunk(5, ''))
+    []
+
+    >>> list(chunk(5, string.ascii_lowercase))
+    ['abcde', 'fghij', 'klmno', 'pqrst', 'uvwxy', 'z']
+    '''
+
+    length = len(seq)
+    count = (length + size - 1) // size
+
+    prev = 0
+    for i in range(1, count + 1):
+        curr = i * size
+        yield seq[prev:curr]
+        prev = curr
+
+
 def compose_2(n):
     '''Yield pairs (0, n), (1, n - 1), ... (n, 0).
 

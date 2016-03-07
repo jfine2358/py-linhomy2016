@@ -4,6 +4,7 @@
 
 from functools import lru_cache
 from .tools import compose_2
+from .tools import chunk
 from .tools import str_from_bytes36
 
 
@@ -74,7 +75,10 @@ def _data(rank, dim):
     >>> str_from_bytes36(_data(0, 10))
     '0a1826344250'
 
+    >>> ' '.join(map(str_from_bytes36, chunk(2, _data(0, 10))))
+    '0a 18 26 34 42 50'
     '''
+
     length = size(rank, dim)
     value = bytearray(2 * rank * length)
 
