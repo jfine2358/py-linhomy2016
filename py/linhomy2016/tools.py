@@ -23,6 +23,37 @@ def chunk(size, seq):
         prev = curr
 
 
+class GetChunkView:
+    '''Provide item access interface to chunks in a sequence.
+
+    Just enough to allow bisect searching of chunks.
+
+    >>> pairs = GetChunkView(2, '0123456789')
+    >>> pairs[0], pairs[1], pairs[2], pairs[3]
+    ('01', '23', '45', '67')
+
+    >>> from bisect import bisect_left
+    >>> bisect_left(pairs, '23')
+    1
+    '''
+
+    def __init__(self, size, seq):
+
+        self.size = size
+        self.seq = seq
+
+    def __len__(self):
+
+        seq, size = self.seq, self.size
+        length = len(seq)
+        return (length + size - 1) // size
+
+    def __getitem__(self, index):
+
+        seq, size = self.seq, self.size
+        return seq[index * size : (index + 1) * size]
+
+
 def compose_2(n):
     '''Yield pairs (0, n), (1, n - 1), ... (n, 0).
 
