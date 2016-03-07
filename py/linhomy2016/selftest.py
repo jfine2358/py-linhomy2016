@@ -9,6 +9,7 @@ from importlib import import_module
 
 MODULES = [
     '.index',
+    '.tools',
 ]
 
 if __name__ == '__main__':

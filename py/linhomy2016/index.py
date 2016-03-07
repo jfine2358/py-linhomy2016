@@ -3,6 +3,8 @@
 '''
 
 from functools import lru_cache
+from .tools import compose_2
+
 
 @lru_cache(maxsize=None)
 def size(rank, dim):
@@ -35,8 +37,7 @@ def size(rank, dim):
     else:
         # Convolve size(1, i) with size(rank - 1, dim - 3 - i).
         value = 0
-        for i in range(dim - 2):
-            j = dim - 3 - i
+        for i, j in compose_2(dim - 3):
             value += size(0, i) * size(rank - 1, j)
 
         return value
