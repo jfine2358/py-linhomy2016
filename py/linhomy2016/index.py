@@ -3,6 +3,7 @@
 '''
 
 from functools import lru_cache
+import itertools
 from .tools import compose_2
 from .tools import chunk
 from .tools import str_from_bytes36
@@ -79,10 +80,36 @@ def _data(rank, dim):
     '0a 18 26 34 42 50'
     '''
 
-    length = size(rank, dim)
-    value = bytearray(2 * rank * length)
-
     if rank == 0:
         return bytes(_data_0(dim))
     else:
-        raise ValueError        # Not yet implemented.
+        return b''.join(_data_recur(rank, dim))
+
+
+def _data_recur(rank, dim):
+    '''Iterate over what will be index_data for _data(rank, dim).
+
+    This function is for use only in _data.
+
+    >>> ' '.join(map(str_from_bytes36, _data_recur(1, 5)))
+    '0002 0010 0101 0200 1000'
+
+    >>> ' '.join(map(str_from_bytes36, _data_recur(2, 6)))
+    '000000'
+    >>> ' '.join(map(str_from_bytes36, _data_recur(2, 7)))
+    '000001 000100 010000'
+    >>> ' '.join(map(str_from_bytes36, _data_recur(2, 8)))
+    '000002 000010 000101 000200 001000 010001 010100 020000 100000'
+    '''
+
+    if rank < 1:
+        raise ValueError(rank)
+
+    for i, j in compose_2(dim - 3):
+
+        prefix = chunk(2, _data(0, i))
+        body = chunk(2 * rank, _data(rank - 1, j))
+
+        pairs = itertools.product(prefix, body)
+        for r, s in pairs:
+            yield r + s
